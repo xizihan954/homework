@@ -3,61 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的 AI Agent 深度实践报告</title>
+    <title>AI Agent 深度实践报告</title>
     <style>
-        /* 全局暗黑主题 */
+        /* 基础设置 */
         body {
             background-color: #0b0f19;
             color: #d1d5db;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Microsoft YaHei', -apple-system, sans-serif;
             line-height: 1.8;
             margin: 0;
             padding: 0;
         }
         .container {
-            max-width: 900px; /* 网页内容宽度 */
+            max-width: 900px;
             margin: 0 auto;
-            padding: 50px 20px;
+            padding: 60px 20px;
         }
         
-        /* 标题全部居中，字体放大 */
+        /* 标题居中且放大 */
         h1 {
             color: #ffffff;
             font-size: 48px;
             text-align: center;
             margin-bottom: 10px;
             letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            text-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
         }
         h2 {
             color: #3b82f6;
             border-bottom: 2px solid #1e293b;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
             margin-top: 60px;
             font-size: 32px;
-            text-align: center; /* 二级标题居中 */
+            text-align: center;
         }
         .subtitle {
             color: #eab308;
             font-size: 18px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 40px;
-            text-align: center; /* 副标题居中 */
+            letter-spacing: 5px;
+            text-align: center;
+            margin-bottom: 50px;
         }
         
-        /* 文字段落放大 */
+        /* 段落文字两端对齐，字体放大 */
         p {
-            font-size: 18px;
+            font-size: 19px;
             color: #9ca3af;
-            text-align: justify; /* 两端对齐，看起来更整齐 */
+            text-align: justify;
+            text-justify: inter-ideograph;
         }
         
+        /* 高亮文字 */
         .highlight {
             color: #ffffff;
             font-weight: bold;
             background-color: rgba(59, 130, 246, 0.3);
-            padding: 2px 8px;
+            padding: 3px 8px;
             border-radius: 4px;
         }
         
@@ -68,33 +69,34 @@
             padding: 30px;
             border-radius: 8px;
             margin-bottom: 50px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        /* 柱状图（居中） */
+        /* 修复后的柱状图 */
         .chart-container {
             display: flex;
             justify-content: space-around;
             align-items: flex-end;
-            height: 300px; /* 变高一点 */
+            height: 250px;
             background-color: #111827;
             border: 1px solid #1e293b;
-            border-radius: 8px;
-            padding: 30px;
+            border-radius: 10px;
+            padding: 30px 20px;
             margin: 40px 0;
         }
         .bar-group {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 20%;
+            width: 22%;
+            height: 100%;
+            justify-content: flex-end; /* 保证柱子从底部生长 */
         }
         .bar {
-            width: 80%;
-            background-color: #3b82f6;
-            border-radius: 4px 4px 0 0;
-            transition: height 1s ease;
+            width: 100%;
+            border-radius: 6px 6px 0 0;
             position: relative;
+            box-shadow: 0 0 10px rgba(255,255,255,0.1);
         }
         .bar::after {
             content: attr(data-value);
@@ -102,7 +104,7 @@
             top: -30px;
             left: 50%;
             transform: translateX(-50%);
-            color: #fff;
+            color: #ffffff;
             font-weight: bold;
             font-size: 16px;
         }
@@ -111,14 +113,15 @@
             color: #d1d5db;
             font-size: 16px;
             text-align: center;
+            white-space: nowrap;
         }
 
-        /* 所有图片居中并放大 */
+        /* 图片居中显示 */
         .showcase-img {
             width: 100%;
             max-width: 800px;
             display: block;
-            margin: 30px auto; /* 自动居中 */
+            margin: 30px auto;
             border-radius: 10px;
             border: 1px solid #374151;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -131,20 +134,17 @@
             margin-bottom: 50px;
         }
 
-        /* 游戏窗口居中 */
-        .game-wrapper {
-            display: flex;
-            justify-content: center;
-            margin: 40px 0;
-        }
+        /* 游戏内嵌框居中 */
         iframe {
+            display: block;
+            margin: 40px auto;
             width: 100%;
             max-width: 900px;
             height: 600px;
             border: 2px solid #3b82f6;
             border-radius: 10px;
             background-color: #000;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
         }
     </style>
 </head>
@@ -161,43 +161,46 @@
     <h2>01. 四款 AI 工具效能对比</h2>
     <p>在长达一个月的体验中，我根据任务场景（编程开发、长文阅读、项目搭建、办公自动化）对四款工具进行了实际测试，并根据我的<span class="highlight">主观体验评分（满分 100）</span>绘制了以下柱状图：</p >
     
+    <!-- 柱状图区域 -->
     <div class="chart-container">
         <div class="bar-group">
             <div class="bar" style="height: 95%; background: #10b981;" data-value="95分"></div>
-            <div class="bar-label">ChatGPT<br>(代码辅助)</div>
+            <div class="bar-label">ChatGPT</div>
         </div>
         <div class="bar-group">
             <div class="bar" style="height: 88%; background: #8b5cf6;" data-value="88分"></div>
-            <div class="bar-label">Claude<br>(长文理解)</div>
+            <div class="bar-label">Claude</div>
         </div>
         <div class="bar-group">
             <div class="bar" style="height: 92%; background: #f59e0b;" data-value="92分"></div>
-            <div class="bar-label">Trae<br>(IDE 开发)</div>
+            <div class="bar-label">Trae</div>
         </div>
         <div class="bar-group">
             <div class="bar" style="height: 85%; background: #ef4444;" data-value="85分"></div>
-            <div class="bar-label">WorkBuddy<br>(文件处理)</div>
+            <div class="bar-label">WorkBuddy</div>
         </div>
     </div>
 
     <h2>02. 实战：ChatGPT 辅助编程</h2>
-    <p>在网页开发与代码编写过程中，我将 ChatGPT 作为我的“贴身编程助手”。先向它描述整体需求，生成基础的 HTML 骨架；遇到报错时，直接将错误代码复制给它询问原因。它不仅极快地生成代码，更重要的是能用通俗易懂的语言解释复杂的代码逻辑，让我知其然更知其所以然。</p >
-    < img src="chatgpt2.png" class="showcase-img" alt="ChatGPT辅助编程">
+    <p>在网页开发与代码编写过程中，我将 ChatGPT 作为我的“贴身编程助手”。先向它描述整体需求，生成基础的 HTML 骨架；遇到报错时，直接将错误代码复制给它询问原因。它不仅极快地生成代码，更重要的是能用通俗易懂的语言解释复杂的代码逻辑。</p >
+    <!-- 图片区域：请确保仓库里有 chatgpt.png，不要有空格 -->
+    < img src="chatgpt.png" class="showcase-img" alt="ChatGPT截图">
     <div class="img-caption">图：ChatGPT 辅助编程记录</div>
 
     <h2>03. Claude 辅助长文分析</h2>
-    <p>Claude 在处理长文本和严谨逻辑方面表现优异。当我有长篇幅的文档阅读需求时，我会将文本直接喂给它，并设定具体的角色。它的上下文理解能力极强，能够精准捕捉长文中的细节，且回答风格严谨、有条理，非常适合用于辅助学术阅读、撰写总结报告。</p >
-    < img src="claude.png" class="showcase-img" alt="Claude长文分析">
+    <p>Claude 在处理长文本和严谨逻辑方面表现优异。当我有长篇幅的文档阅读需求时，我会将文本直接喂给它，并设定具体的角色。它的上下文理解能力极强，能够精准捕捉长文中的细节，回答风格严谨、有条理，非常适合辅助学术阅读。</p >
+    < img src="claude.png" class="showcase-img" alt="Claude截图">
     <div class="img-caption">图：Claude 长文阅读记录</div>
 
     <h2>04. Trae 编程工作台</h2>
-    <p>Trae 是一款极具潜力的 AI 编程工作台。我将它用于项目开发的初期探索和代码重构。通过其内置的 AI 对话窗口，我可以直接在项目目录下向 AI 提问，让它快速分析现有代码库的结构。它将 AI 能力无缝融入了开发环境，极大减少了在“浏览器搜索”和“代码编辑器”之间来回切换的时间。</p >
-    < img src="trae2.png" class="showcase-img" alt="Trae编程">
+    <p>Trae 是一款极具潜力的 AI 编程工作台。我将它用于项目开发的初期探索和代码重构。通过其内置的 AI 对话窗口，我可以直接在项目目录下向 AI 提问，让它快速分析现有代码库的结构。它将 AI 能力无缝融入了开发环境，极大提升了效率。</p >
+    < img src="trae.png" class="showcase-img" alt="Trae截图">
     <div class="img-caption">图：Trae 项目开发记录</div>
 
     <h2>05. WorkBuddy 文件处理</h2>
-    <p>面对电脑里日益堆积、杂乱无章的图片和各类文档，WorkBuddy 成了我的“文件整理管家”。我利用它的批量处理功能，设定好特定的规则，让软件自动对下载文件夹和桌面进行扫描和归类。它彻底解放了双手，告别了以前手动拖拽文件的繁琐过程。</p >
-    < img src="work Buddy文件整理.png" class="showcase-img" alt="WorkBuddy文件处理">
+    <p>面对电脑里日益堆积的文档，WorkBuddy 成了我的“文件整理管家”。我利用它的批量处理功能，设定好特定的规则，让软件自动对下载文件夹和桌面进行扫描和归类。它彻底解放了双手，告别了以前手动拖拽文件的繁琐过程。</p >
+    <!-- 注意这里改成了 workbuddy.png，避免中文和空格导致图片消失 -->
+    < img src="workbuddy.png" class="showcase-img" alt="WorkBuddy截图">
     <div class="img-caption">图：WorkBuddy 文件整理记录</div>
 
     <h2>06. 实战：用 AI 辅助开发小游戏</h2>
@@ -206,11 +209,10 @@
     <div class="img-caption">图：向 ChatGPT 发送需求，获取完整的游戏代码</div>
 
     <h2>在线体验：打砖块小游戏</h2>
-    <p style="text-align: center;">下面是直接内嵌在网页中的游戏运行画面，点击下方区域即可试玩：</p >
-    <div class="game-wrapper">
-        <!-- 这里内嵌了游戏文件 -->
-        <iframe src="breakout.html"></iframe>
-    </div>
+    <p style="text-align: center; color: #3b82f6; font-weight: bold;">点击下方区域即可试玩：</p >
+    
+    <!-- 游戏内嵌区 -->
+    <iframe src="breakout.html"></iframe>
 
     <h2>07. 总结与反思</h2>
     <p style="margin-bottom: 80px;">通过这次作业，我发现 AI 不是用来替代人类工作的，而是用来<span class="highlight">改变工作怎么开始</span>的。未来，我希望能够进一步掌握 AI 的 Prompt（提示词）技巧，让它们成为我学习和生活中最高效的“外脑”。</p >
