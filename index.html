@@ -108,3 +108,218 @@
 
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent 深度实践报告</title>
+    <style>
+        /* 全局排版与暗黑主题 */
+        body {
+            background-color: #0b0f19;
+            color: #d1d5db;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+        /* 标题样式 */
+        h1 {
+            color: #ffffff;
+            font-size: 42px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        h2 {
+            color: #3b82f6; /* 科技蓝 */
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 10px;
+            margin-top: 50px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #eab308; /* 亮黄色点缀 */
+            font-size: 16px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+        .highlight {
+            color: #ffffff;
+            font-weight: bold;
+            background-color: rgba(59, 130, 246, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        /* 引言卡片 */
+        .intro-box {
+            background: linear-gradient(135deg, #111827, #1e293b);
+            border-left: 4px solid #3b82f6;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* 图表样式（纯 CSS 画柱状图） */
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 250px;
+            background-color: #111827;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 20%;
+        }
+        .bar {
+            width: 100%;
+            background-color: #3b82f6;
+            border-radius: 4px 4px 0 0;
+            transition: height 1s ease;
+            position: relative;
+        }
+        .bar::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .bar-label {
+            margin-top: 10px;
+            color: #9ca3af;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* 卡片网格布局 */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 30px;
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+        .card {
+            background-color: #111827;
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+            padding: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+        .card h3 {
+            color: #fff;
+            margin-top: 0;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+        }
+        .card p {
+            font-size: 15px;
+            color: #9ca3af;
+        }
+        .card img {
+            width: 100%;
+            border-radius: 6px;
+            margin-top: 15px;
+            border: 1px solid #374151;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="subtitle">AI AGENT · 实践与探索</div>
+    <h1>从工具到伙伴：我的 AI 工作流进化</h1>
+    
+    <div class="intro-box">
+        <p><strong>你好，老师。</strong>这学期，我将 AI Agent 深度融入了我的学习和开发中。与传统搜索引擎不同，<span class="highlight">AI Agent 不仅仅是“会回答”，它开始能够读取文件、执行多步骤任务并交付最终结果</span>。本次作业我将展示我对四款主流 AI 工具的横向对比，以及我如何利用 AI 辅助完成一个桌面小游戏开发与文件自动化处理。</p >
+    </div>
+
+    <h2>01. 四款 AI 工具效能对比</h2>
+    <p>在长达一个月的体验中，我根据任务场景（编程开发、长文阅读、项目搭建、办公自动化）对四款工具进行了实际测试，并根据我的<span class="highlight">主观体验评分（满分 100）</span>绘制了以下柱状图：</p >
+    
+    <!-- 这里是纯 CSS 画的柱状图 -->
+    <div class="chart-container">
+        <div class="bar-group">
+            <div class="bar" style="height: 95%; background: #10b981;" data-value="95分"></div>
+            <div class="bar-label">ChatGPT<br>(代码辅助)</div>
+        </div>
+        <div class="bar-group">
+            <div class="bar" style="height: 88%; background: #8b5cf6;" data-value="88分"></div>
+            <div class="bar-label">Claude<br>(长文理解)</div>
+        </div>
+        <div class="bar-group">
+            <div class="bar" style="height: 92%; background: #f59e0b;" data-value="92分"></div>
+            <div class="bar-label">Trae<br>(IDE 开发)</div>
+        </div>
+        <div class="bar-group">
+            <div class="bar" style="height: 85%; background: #ef4444;" data-value="85分"></div>
+            <div class="bar-label">WorkBuddy<br>(文件处理)</div>
+        </div>
+    </div>
+
+    <h2>02. 实战：用 AI 辅助开发小游戏</h2>
+    <p>为了测试 AI 的编程能力，我尝试让 ChatGPT 和 Trae 辅助我编写了一个基于 Web 的“打砖块”小游戏。从搭建 HTML5 Canvas 画布，到实现物理碰撞逻辑，AI 承担了 80% 的代码编写工作。我主要负责提出需求、测试运行并排查错误。这让我深刻体会到，<span class="highlight">编程语言不再是门槛，逻辑思维和拆解任务的能力才是核心。</span></p >
+
+    <h2>03. 四大工具实战截图</h2>
+    <div class="grid">
+        <!-- 卡片 1 -->
+        <div class="card">
+            <h3>ChatGPT · 代码辅助</h3>
+            <p>用于理解复杂逻辑，帮我快速生成网页基础结构和游戏核心代码。</p >
+            < img src="chatgpt.png" alt="ChatGPT 截图">
+        </div>
+        <!-- 卡片 2 -->
+        <div class="card">
+            <h3>Claude · 资料研究</h3>
+            <p>用于阅读长篇英文文档，快速提取要点，生成结构化的总结笔记。</p >
+            < img src="claude.png" alt="Claude 截图">
+        </div>
+        <!-- 卡片 3 -->
+        <div class="card">
+            <h3>Trae · 项目开发</h3>
+            <p>沉浸式 AI 编程工作台，直接读取本地代码进行 debug 纠错，效率极高。</p >
+            < img src="trae.png" alt="Trae 截图">
+        </div>
+        <!-- 卡片 4 -->
+        <div class="card">
+            <h3>WorkBuddy · 办公处理</h3>
+            <p>自动化整理桌面的截图与文件，将杂乱资料一键归档，节省大量时间。</p >
+            < img src="workbuddy.png" alt="WorkBuddy 截图">
+        </div>
+    </div>
+
+    <h2>04. 总结与反思</h2>
+    <p style="margin-bottom: 60px;">通过这次作业，我发现 AI 不是用来替代人类工作的，而是用来<span class="highlight">改变工作怎么开始</span>的。未来，我希望能够进一步掌握 AI 的 Prompt（提示词）技巧，让它们成为我学习和生活中最高效的“外脑”。</p >
+
+</div>
+
+</body>
+</html>
