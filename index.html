@@ -211,44 +211,20 @@
             text-align: center;
         }
 
-        /* 卡片网格布局 */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-top: 30px;
-        }
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
-        }
-        .card {
-            background-color: #111827;
-            border: 1px solid #1e293b;
-            border-radius: 10px;
-            padding: 25px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
-            border-color: #3b82f6;
-        }
-        .card h3 {
-            color: #fff;
-            margin-top: 0;
-            font-size: 22px;
-            display: flex;
-            align-items: center;
-        }
-        .card p {
-            font-size: 15px;
-            color: #9ca3af;
-        }
-        .card img {
+        /* 用于展示截图的图片样式 */
+        .showcase-img {
             width: 100%;
-            border-radius: 6px;
-            margin-top: 15px;
+            border-radius: 10px;
             border: 1px solid #374151;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .img-caption {
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 10px;
+            margin-bottom: 40px;
         }
     </style>
 </head>
@@ -265,7 +241,7 @@
     <h2>01. 四款 AI 工具效能对比</h2>
     <p>在长达一个月的体验中，我根据任务场景（编程开发、长文阅读、项目搭建、办公自动化）对四款工具进行了实际测试，并根据我的<span class="highlight">主观体验评分（满分 100）</span>绘制了以下柱状图：</p >
     
-    <!-- 这里是纯 CSS 画的柱状图 -->
+    <!-- 纯 CSS 画的柱状图 -->
     <div class="chart-container">
         <div class="bar-group">
             <div class="bar" style="height: 95%; background: #10b981;" data-value="95分"></div>
@@ -286,37 +262,13 @@
     </div>
 
     <h2>02. 实战：用 AI 辅助开发小游戏</h2>
-    <p>为了测试 AI 的编程能力，我尝试让 ChatGPT 和 Trae 辅助我编写了一个基于 Web 的“打砖块”小游戏。从搭建 HTML5 Canvas 画布，到实现物理碰撞逻辑，AI 承担了 80% 的代码编写工作。我主要负责提出需求、测试运行并排查错误。这让我深刻体会到，<span class="highlight">编程语言不再是门槛，逻辑思维和拆解任务的能力才是核心。</span></p >
+    <p>为了测试 AI 的真实编程能力，我尝试让 ChatGPT 辅助我编写了一个基于 Web 的“打砖块”小游戏。从搭建 HTML5 Canvas 画布，到实现物理碰撞逻辑，<span class="highlight">AI 承担了 80% 的代码编写工作</span>。我主要负责提出需求、测试运行并排查错误。这让我深刻体会到，编程语言不再是门槛，逻辑思维和拆解任务的能力才是核心。</p >
+    
+    <!-- 这里放你发给AI要代码的截图 -->
+    < img src="game_ai.png" class="showcase-img" alt="AI 辅助生成游戏代码截图">
+    <div class="img-caption">图：向 ChatGPT 发送需求，获取完整的游戏代码</div>
 
-    <h2>03. 四大工具实战截图</h2>
-    <div class="grid">
-        <!-- 卡片 1 -->
-        <div class="card">
-            <h3>ChatGPT · 代码辅助</h3>
-            <p>用于理解复杂逻辑，帮我快速生成网页基础结构和游戏核心代码。</p >
-            < img src="chatgpt.png" alt="ChatGPT 截图">
-        </div>
-        <!-- 卡片 2 -->
-        <div class="card">
-            <h3>Claude · 资料研究</h3>
-            <p>用于阅读长篇英文文档，快速提取要点，生成结构化的总结笔记。</p >
-            < img src="claude.png" alt="Claude 截图">
-        </div>
-        <!-- 卡片 3 -->
-        <div class="card">
-            <h3>Trae · 项目开发</h3>
-            <p>沉浸式 AI 编程工作台，直接读取本地代码进行 debug 纠错，效率极高。</p >
-            < img src="trae.png" alt="Trae 截图">
-        </div>
-        <!-- 卡片 4 -->
-        <div class="card">
-            <h3>WorkBuddy · 办公处理</h3>
-            <p>自动化整理桌面的截图与文件，将杂乱资料一键归档，节省大量时间。</p >
-            < img src="workbuddy.png" alt="WorkBuddy 截图">
-        </div>
-    </div>
-
-    <h2>04. 总结与反思</h2>
+    <h2>03. 总结与反思</h2>
     <p style="margin-bottom: 60px;">通过这次作业，我发现 AI 不是用来替代人类工作的，而是用来<span class="highlight">改变工作怎么开始</span>的。未来，我希望能够进一步掌握 AI 的 Prompt（提示词）技巧，让它们成为我学习和生活中最高效的“外脑”。</p >
 
 </div>
