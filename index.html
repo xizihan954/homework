@@ -3,233 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agent 深度实践报告</title>
+    <title>我的课程作业导航</title>
     <style>
-        /* 基础设置 */
         body {
             background-color: #0b0f19;
             color: #d1d5db;
-            font-family: 'Microsoft YaHei', -apple-system, sans-serif;
+            font-family: 'Microsoft YaHei', sans-serif;
             line-height: 1.8;
             margin: 0;
             padding: 0;
         }
+        /* 顶部导航栏 */
+        .top-nav {
+            background-color: #111827;
+            border-bottom: 1px solid #1e293b;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .logo { color: #3b82f6; font-weight: bold; font-size: 20px; letter-spacing: 1px; }
+        .nav-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        .nav-links a:hover { background-color: #1e293b; color: #fff; }
+        .nav-links a.active { background-color: #3b82f6; color: #fff; }
+
+        /* 主内容区 */
         .container {
             max-width: 900px;
             margin: 0 auto;
             padding: 60px 20px;
         }
-        
-        /* 标题居中且放大 */
-        h1 {
-            color: #ffffff;
-            font-size: 48px;
-            text-align: center;
+        .header-text { text-align: center; margin-bottom: 50px; }
+        .header-text h1 {
+            color: #fff;
+            font-size: 42px;
             margin-bottom: 10px;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+            background: linear-gradient(90deg, #a78bfa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        h2 {
-            color: #3b82f6;
-            border-bottom: 2px solid #1e293b;
-            padding-bottom: 15px;
-            margin-top: 60px;
-            font-size: 32px;
-            text-align: center;
-        }
-        .subtitle {
-            color: #eab308;
-            font-size: 18px;
-            letter-spacing: 5px;
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        /* 段落文字两端对齐，字体放大 */
-        p {
-            font-size: 19px;
-            color: #9ca3af;
-            text-align: justify;
-            text-justify: inter-ideograph;
-        }
-        
-        /* 高亮文字 */
-        .highlight {
-            color: #ffffff;
-            font-weight: bold;
-            background-color: rgba(59, 130, 246, 0.3);
-            padding: 3px 8px;
-            border-radius: 4px;
-        }
-        
-        /* 引言框 */
-        .intro-box {
-            background: linear-gradient(135deg, #111827, #1e293b);
-            border-left: 6px solid #3b82f6;
-            padding: 30px;
-            border-radius: 8px;
-            margin-bottom: 50px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
+        .header-text p { color: #9ca3af; font-size: 18px; }
 
-        /* 修复后的柱状图 */
-        .chart-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            height: 250px;
+        /* 作业卡片 */
+        .card {
+            display: block;
             background-color: #111827;
             border: 1px solid #1e293b;
-            border-radius: 10px;
-            padding: 30px 20px;
-            margin: 40px 0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
-        .bar-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 22%;
-            height: 100%;
-            justify-content: flex-end; /* 保证柱子从底部生长 */
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
         }
-        .bar {
-            width: 100%;
-            border-radius: 6px 6px 0 0;
-            position: relative;
-            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+        .tag {
+            display: inline-block;
+            color: #a78bfa;
+            border: 1px solid #a78bfa;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 15px;
         }
-        .bar::after {
-            content: attr(data-value);
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        .bar-label {
-            margin-top: 15px;
-            color: #d1d5db;
-            font-size: 16px;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        /* 图片居中显示 */
-        .showcase-img {
-            width: 100%;
-            max-width: 800px;
-            display: block;
-            margin: 30px auto;
-            border-radius: 10px;
-            border: 1px solid #374151;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .img-caption {
-            text-align: center;
-            color: #6b7280;
-            font-size: 15px;
-            margin-top: -15px;
-            margin-bottom: 50px;
-        }
-
-        /* 游戏内嵌框居中 */
-        iframe {
-            display: block;
-            margin: 40px auto;
-            width: 100%;
-            max-width: 900px;
-            height: 600px;
-            border: 2px solid #3b82f6;
-            border-radius: 10px;
-            background-color: #000;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-        }
+        .card h2 { color: #fff; font-size: 26px; margin: 0 0 10px 0; }
+        .card p { color: #9ca3af; font-size: 16px; margin: 0; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="subtitle">AI AGENT · 实践与探索</div>
-    <h1>我的 AI 工作流进化</h1>
-    
-    <div class="intro-box">
-        <p><strong>你好，老师。</strong>这学期，我将 AI Agent 深度融入了我的学习和开发中。与传统搜索引擎不同，<span class="highlight">AI Agent 不仅仅是“会回答”，它开始能够读取文件、执行多步骤任务并交付最终结果</span>。本次作业我将展示对四款主流 AI 工具的横向对比，以及我如何利用 AI 辅助完成小游戏开发。</p >
-    </div>
-
-    <h2>01. 四款 AI 工具效能对比</h2>
-    <p>在长达一个月的体验中，我根据任务场景（编程开发、长文阅读、项目搭建、办公自动化）对四款工具进行了实际测试，并根据我的<span class="highlight">主观体验评分（满分 100）</span>绘制了以下柱状图：</p >
-    
-    <!-- 柱状图区域 -->
-    <div class="chart-container">
-        <div class="bar-group">
-            <div class="bar" style="height: 95%; background: #10b981;" data-value="95分"></div>
-            <div class="bar-label">ChatGPT</div>
-        </div>
-        <div class="bar-group">
-            <div class="bar" style="height: 88%; background: #8b5cf6;" data-value="88分"></div>
-            <div class="bar-label">Claude</div>
-        </div>
-        <div class="bar-group">
-            <div class="bar" style="height: 92%; background: #f59e0b;" data-value="92分"></div>
-            <div class="bar-label">Trae</div>
-        </div>
-        <div class="bar-group">
-            <div class="bar" style="height: 85%; background: #ef4444;" data-value="85分"></div>
-            <div class="bar-label">WorkBuddy</div>
+    <div class="top-nav">
+        <div class="logo">我的课程作业</div>
+        <div class="nav-links">
+            <a href=" " class="active">首页</a >
+            <a href="homework1.html">作业 1</a >
+            <a href="homework2.html">作业 2</a >
         </div>
     </div>
 
-    <h2>02. 实战：ChatGPT 辅助编程</h2>
-    <p>在网页开发与代码编写过程中，我将 ChatGPT 作为我的“贴身编程助手”。先向它描述整体需求，生成基础的 HTML 骨架；遇到报错时，直接将错误代码复制给它询问原因。它不仅极快地生成代码，更重要的是能用通俗易懂的语言解释复杂的代码逻辑。</p >
-    <!-- 图片区域：请确保仓库里有 chatgpt.png，不要有空格 -->
-    <img src="chatgpt2.png" width="600"class="my-img">
-    <div class="img-caption">图：ChatGPT 辅助编程记录</div>
+    <div class="container">
+        <div class="header-text">
+            <h1>我的 AI 课程作业</h1>
+            <p>点击下方卡片查看作业详情</p >
+        </div>
 
-    <h2>03. Claude 辅助长文分析</h2>
-    <p>Claude 在处理长文本和严谨逻辑方面表现优异。当我有长篇幅的文档阅读需求时，我会将文本直接喂给它，并设定具体的角色。它的上下文理解能力极强，能够精准捕捉长文中的细节，回答风格严谨、有条理，非常适合辅助学术阅读。</p >
-    <img src="claude.png" width="600">
-    <div class="img-caption">图：Claude 长文阅读记录</div>
+        <!-- 作业 1 卡片 -->
+        <a href="homework1.html" class="card">
+            <div class="tag">第 1 次作业</div>
+            <h2>AI 编程工具作品展示</h2>
+            <p>用 AI 编程工具完成的打砖块小游戏、工具对比柱状图与心得总结。</p >
+        </a >
 
-    <h2>04. Trae 编程工作台</h2>
-    <p>Trae 是一款极具潜力的 AI 编程工作台。我将它用于项目开发的初期探索和代码重构。通过其内置的 AI 对话窗口，我可以直接在项目目录下向 AI 提问，让它快速分析现有代码库的结构。它将 AI 能力无缝融入了开发环境，极大提升了效率。</p >
-    <img src="trae2.png" width="600"class="my-img">
-    <div class="img-caption">图：Trae 项目开发记录</div>
-
-    <h2>05. WorkBuddy 文件处理</h2>
-    <p>面对电脑里日益堆积的文档，WorkBuddy 成了我的“文件整理管家”。我利用它的批量处理功能，设定好特定的规则，让软件自动对下载文件夹和桌面进行扫描和归类。它彻底解放了双手，告别了以前手动拖拽文件的繁琐过程。</p >
-    <!-- 注意这里改成了 workbuddy.png，避免中文和空格导致图片消失 -->
-    <img src="workbuddy.png" width="600"class="my-img">
-    <div class="img-caption">图：WorkBuddy 文件整理记录</div>
-
-    <h2>06. 实战：用 AI 辅助开发小游戏</h2>
-    <p>为了测试 AI 的真实编程能力，我尝试让 ChatGPT 辅助我编写了一个基于 Web 的“打砖块”小游戏。从搭建 HTML5 Canvas 画布，到实现物理碰撞逻辑，<span class="highlight">AI 承担了 80% 的代码编写工作</span>。这让我深刻体会到，编程语言不再是门槛，逻辑思维和拆解任务的能力才是核心。</p >
-    h2>06. 实战：从零开发“打砖块”游戏</h2>
-    
-    <p><strong>【需求拆解与生成】</strong>为了测试 AI 的真实编程能力，我决定用 HTML5 Canvas 编写一个“打砖块”小游戏。我没有直接要代码，而是向 ChatGPT 下达了详细指令：“<span class="highlight">请帮我写一个打砖块游戏，包含挡板、小球、彩色砖块，并用鼠标控制挡板移动</span>”。AI 迅速生成了完整的基础代码，并解释了“圆与矩形碰撞检测”的核心逻辑。</p >
-    < img src="step1.png" class="my-img" alt="向AI提出需求">
-    <div class="img-caption">步骤一：向 AI 描述需求，获取核心逻辑与代码骨架</div>
-
-    <p><strong>【迭代与优化】</strong>拿到初始代码后，我觉得画面太单调了。于是我继续向 AI 提问：“<span class="highlight">怎么给砖块加上彩虹渐变色？怎么增加计分系统？</span>” AI 提供了 CSS 颜色数组和 Canvas 文字渲染的代码。我把这些代码融合进文件，最终完成了这个网页版的游戏。</p >
-    < img src="step2.png" class="my-img" alt="优化游戏代码">
-    <div class="img-caption">步骤二：通过多轮对话，让 AI 辅助添加计分与美化功能</div>
-
-    <p>通过这次实战，我深刻体会到：<span class="highlight">AI 承担了 80% 的代码编写工作，编程语言不再是门槛，逻辑思维和拆解任务的能力才是核心。</span></p >
-    <img src="game_ai.png" width="600"class="my-img">
-    
-    <div class="img-caption">图：向 ChatGPT 发送需求，获取完整的游戏代码</div>
-
-    <h2>在线体验：打砖块小游戏</h2>
-    <p style="text-align: center; color: #3b82f6; font-weight: bold;">点击下方区域即可试玩：</p >
-    
-    <!-- 游戏内嵌区 -->
-    <iframe src="breakout.html"></iframe>
-
-    <h2>07. 总结与反思</h2>
-    <p style="margin-bottom: 80px;">通过这次作业，我发现 AI 不是用来替代人类工作的，而是用来<span class="highlight">改变工作怎么开始</span>的。未来，我希望能够进一步掌握 AI 的 Prompt（提示词）技巧，让它们成为我学习和生活中最高效的“外脑”。</p >
-
-</div>
+        <!-- 作业 2 卡片 -->
+        <a href="homework2.html" class="card">
+            <div class="tag">第 2 次作业</div>
+            <h2>神经网络 XOR 训练可视化</h2>
+            <p>基于 TensorFlow 运行 XOR 异或代码，并将其隐藏层的工作过程进行可视化展示。</p >
+        </a >
+    </div>
 
 </body>
 </html>
