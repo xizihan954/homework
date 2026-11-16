@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLP 学习参数的实现与可视化</title>
+    <style>
+        body { background-color: #0b0f19; color: #d1d5db; font-family: 'Microsoft YaHei', sans-serif; margin: 0; padding: 0; line-height: 1.8; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 50px 20px; }
+        .back-btn { display: inline-block; color: #3b82f6; text-decoration: none; margin-bottom: 30px; font-size: 16px; font-weight: bold; }
+        .back-btn:hover { color: #60a5fa; text-decoration: underline; }
+        h1 { color: #fff; font-size: 42px; text-align: center; margin-bottom: 10px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
+        h2 { color: #3b82f6; border-bottom: 2px solid #1e293b; padding-bottom: 15px; margin-top: 50px; font-size: 28px; }
+        p { color: #9ca3af; font-size: 18px; text-align: justify; }
+        .highlight { color: #ffffff; font-weight: bold; background-color: rgba(59, 130, 246, 0.3); padding: 2px 6px; border-radius: 4px; }
+        .my-img { display: block; margin: 30px auto; max-width: 100%; border-radius: 10px; border: 1px solid #374151; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .img-caption { text-align: center; color: #6b7280; font-size: 14px; margin-top: -15px; margin-bottom: 40px; }
+        
+        .panel { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 30px; margin-top: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; gap: 40px; flex-wrap: wrap; }
+        .controls { flex: 1; min-width: 300px; }
+        .visualizer { flex: 1; min-width: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0b0f19; border-radius: 8px; border: 1px dashed #374151; padding: 20px; position: relative; overflow: hidden; }
+        button { background-color: #3b82f6; color: #fff; border: none; padding: 12px 24px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; width: 100%; margin-bottom: 20px; }
+        button:hover { background-color: #2563eb; box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+        button.running { background-color: #ef4444; }
+        .slider-group { margin-bottom: 20px; }
+        .slider-group label { display: flex; justify-content: space-between; color: #d1d5db; font-size: 15px; margin-bottom: 8px; }
+        input[type=range] { width: 100%; cursor: pointer; }
+        .svg-network { width: 100%; height: 300px; }
+        .node { transition: fill 0.3s, r 0.3s; }
+        .link { transition: stroke-opacity 0.3s, stroke-width 0.3s; }
+        .data-board { margin-top: 20px; font-family: monospace; background: #000; padding: 15px; border-radius: 6px; border: 1px solid #1e293b; }
+        .data-board span { color: #10b981; font-weight: bold; }
+        .explain-box { background: linear-gradient(135deg, #111827, #1e293b); border-left: 4px solid #eab308; padding: 25px; border-radius: 8px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href=" " class="back-btn">← 返回主页</a >
+
+        <h1>MLP 学习参数的实现与可视化</h1>
+        <p style="text-align: center; color: #eab308;">—— 从底层计算，到 Web 端的动态交互推演 ——</p >
+
+        <h2>01. 底层实现：真实运行记录</h2>
+        <p>为了直观理解神经网络，我首先使用 Python 手写了包含 2 个隐藏神经元的前馈网络。经过 300 轮（Epoch）的迭代训练，Loss 收敛至 0.0279，成功跑通了 XOR（异或）逻辑分类任务。</p >
+        
+        <img src="xor_result.png" class="my-img" alt="Python运行结果截图">
+        <div class="img-caption">图：终端中打印的 300 轮后各层参数 (hidden & probability) 状态</div>
+
+        <p>在终端数据中，我发现 <code>hidden</code> 列的两个数值（h1 和 h2）极其关键。例如输入 [0, 1] 时，h2 激增至 0.935，h1 却为 0，神经网络正是通过这种“非线性激活”区分了数据。</p >
+
+        <h2>02. 创新展示：浏览器中的动态参数学习沙盒</h2>
+        <p>为了让枯燥的终端数字变得直观，我<span class="highlight">用纯前端 JavaScript 实现了一个同款 2-2-1 结构的 MLP 模型</span>。下面的动画并非视频，而是由代码在浏览器里实时计算、实时渲染的！</p >
+        
+        <div class="explain-box">
+            <strong>交互指南：</strong>点击【开始训练】，看着线条从虚无逐渐变亮、变粗，这就是权重 W 在反向传播中被更新的过程。线条变红代表权重为负。你可以拖动下方的【学习率滑块】，体验不同超参数对收敛速度的剧烈影响。
+        </div>
+
+        <div class="panel">
+            <div class="controls">
+                <button id="trainBtn">▶ 开始/暂停训练</button>
+                <button id="resetBtn" style="background-color: #4b5563;">↺ 重置参数</button>
+                
+                <div class="slider-group">
+                    <label><span>学习率 (Learning Rate)</span> <span id="lrVal">0.5</span></label>
+                    <input type="range" id="lrInput" min="0.01" max="2.0" step="0.01" value="0.5">
+                </div>
+
+                <div class="data-board">
+                    > 当前训练轮数: <span id="epochVal">0</span> <br>
+                    > 当前损失(Loss): <span id="lossVal">0.5000</span> <br>
+                    > 状态: <span id="statusVal" style="color: #eab308;">等待启动</span>
+                </div>
+            </div>
+
+            <div class="visualizer">
+                <svg class="svg-network" viewBox="0 0 300 300">
+                    <line x1="50" y1="100" x2="150" y2="70" class="link" id="l1" stroke="#3b82f6" stroke-width="2" stroke-opacity="0.2"/>
+                    <line x1="50" y1="100" x2="150" y2="150" class="link" id="l2" stroke="#3b82f6" stroke-width="2" stroke-opacity="0.2"/>
+                    <line x1="50" y1="200" x2="150" y2="70" class="link" id="l3" stroke="#3b82f6" stroke-width="2" stroke-opacity="0.2"/>
+                    <line x1="50" y1="200" x2="150" y2="150" class="link" id="l4" stroke="#3b82f6" stroke-width="2" stroke-opacity="0.2"/>
+                    <line x1="150" y1="70" x2="250" y2="135" class="link" id="l5" stroke="#10b981" stroke-width="2" stroke-opacity="0.2"/>
+                    <line x1="150" y1="150" x2="250" y2="135" class="link" id="l6" stroke="#10b981" stroke-width="2" stroke-opacity="0.2"/>
+                    <circle cx="50" cy="100" r="15" fill="#1e293b" stroke="#3b82f6" stroke-width="2" class="node"/>
+                    <circle cx="50" cy="200" r="15" fill="#1e293b" stroke="#3b82f6" stroke-width="2" class="node"/>
+                    <text x="20" y="105" fill="#9ca3af" font-size="12">输入1</text>
+                    <text x="20" y="205" fill="#9ca3af" font-size="12">输入2</text>
+                    <circle cx="150" cy="70" r="15" fill="#1e293b" stroke="#8b5cf6" stroke-width="2" class="node"/>
+                    <circle cx="150" cy="150" r="15" fill="#1e293b" stroke="#8b5cf6" stroke-width="2" class="node"/>
+                    <text x="130" y="50" fill="#9ca3af" font-size="12">隐藏层</text>
+                    <circle cx="250" cy="135" r="15" fill="#1e293b" stroke="#f59e0b" stroke-width="2" class="node"/>
+                    <text x="270" y="140" fill="#9ca3af" font-size="12">输出</text>
+                </svg>
+            </div>
+        </div>
+
+        <h2>03. 学习感悟</h2>
+        <p style="margin-bottom: 80px;">对比第一部分的 Python 终端输出，这个前端沙盒让我对“参数更新”有了肌肉记忆般的理解。看着线条从杂乱无章到清晰坚定，我才真正懂了什么叫 <span class="highlight">“神经网络在学习”</span>。</p >
+
+    </div>
+        <script>
+        const data = [ { x: [0, 0], y: 0 }, { x: [0, 1], y: 1 }, { x: [1, 0], y: 1 }, { x: [1, 1], y: 0 } ];
+        let W1, b1, W2, b2;
+        function initParams() {
+            W1 = [[Math.random(), Math.random()], [Math.random(), Math.random()]];
+            b1 = [Math.random(), Math.random()]; W2 = [Math.random(), Math.random()]; b2 = Math.random();
+        }
+        const sigmoid = x => 1 / (1 + Math.exp(-x));
+        const sigmoidDeriv = x => x * (1 - x);
+        let isTraining = false, epoch = 0, animationId;
+
+        function trainStep(lr) {
+            let totalLoss = 0;
+            data.forEach(d => {
+                let h1 = sigmoid(d.x[0] * W1[0][0] + d.x[1] * W1[1][0] + b1[0]);
+                let h2 = sigmoid(d.x[0] * W1[0][1] + d.x[1] * W1[1][1] + b1[1]);
+                let out = sigmoid(h1 * W2[0] + h2 * W2[1] + b2);
+                let error = d.y - out; totalLoss += error * error;
+                let delta_out = error * sigmoidDeriv(out);
+                let delta_h1 = (delta_out * W2[0]) * sigmoidDeriv(h1);
+                let delta_h2 = (delta_out * W2[1]) * sigmoidDeriv(h2);
+                W2[0] += lr * delta_out * h1; W2[1] += lr * delta_out * h2; b2 += lr * delta_out;
+                W1[0][0] += lr * delta_h1 * d.x[0]; W1[1][0] += lr * delta_h1 * d.x[1]; b1[0] += lr * delta_h1;
+                W1[0][1] += lr * delta_h2 * d.x[0]; W1[1][1] += lr * delta_h2 * d.x[1]; b1[1] += lr * delta_h2;
+            });
+            return totalLoss / 4;
+        }
+        function updateVisuals() {
+            const setLine = (id, weight) => {
+                const el = document.getElementById(id);
+                el.style.strokeOpacity = Math.max(Math.min(Math.abs(weight), 1), 0.1);
+                el.style.strokeWidth = Math.min(Math.abs(weight) * 10 + 1, 15);
+                el.style.stroke = weight < 0 ? "#ef4444" : (id === 'l5' || id === 'l6' ? "#10b981" : "#3b82f6");
+            };
+            setLine('l1', W1[0][0]); setLine('l2', W1[0][1]); setLine('l3', W1[1][0]); setLine('l4', W1[1][1]);
+            setLine('l5', W2[0]); setLine('l6', W2[1]);
+        }
+        function loop() {
+            if (!isTraining) return;
+            let loss = trainStep(parseFloat(document.getElementById('lrInput').value));
+            epoch++;
+            document.getElementById('epochVal').innerText = epoch;
+            document.getElementById('lossVal').innerText = loss.toFixed(4);
+            updateVisuals();
+            if (loss < 0.001 || epoch > 5000) {
+                isTraining = false; document.getElementById('trainBtn').innerText = "▶ 训练完成";
+                document.getElementById('trainBtn').classList.remove('running');
+                document.getElementById('statusVal').innerText = "已收敛！"; document.getElementById('statusVal').style.color = "#10b981";
+            } else { animationId = requestAnimationFrame(loop); }
+        }
+        document.getElementById('trainBtn').addEventListener('click', function() {
+            isTraining = !isTraining;
+            if (isTraining) {
+                this.innerText = "⏸ 暂停训练"; this.classList.add('running');
+                document.getElementById('statusVal').innerText = "梯度下降中..."; document.getElementById('statusVal').style.color = "#3b82f6"; loop();
+            } else {
+                this.innerText = "▶ 继续训练"; this.classList.remove('running');
+                document.getElementById('statusVal').innerText = "已暂停"; document.getElementById('statusVal').style.color = "#eab308"; cancelAnimationFrame(animationId);
+            }
+        });
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            isTraining = false; cancelAnimationFrame(animationId);
+            initParams(); epoch = 0;
+            document.getElementById('trainBtn').innerText = "▶ 开始训练"; document.getElementById('trainBtn').classList.remove('running');
+            document.getElementById('epochVal').innerText = "0"; document.getElementById('lossVal').innerText = "0.5000";
+            document.getElementById('statusVal').innerText = "等待启动"; document.getElementById('statusVal').style.color = "#eab308"; updateVisuals();
+        });
+        document.getElementById('lrInput').addEventListener('input', function() { document.getElementById('lrVal').innerText = this.value; });
+        initParams(); updateVisuals();
+    </script>
+</body>
+</html>
