@@ -1,87 +1,328 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的课程作业</title>
-    <style>
-        body {
-            background-color: #0b0f19;
-            color: #d1d5db;
-            font-family: 'Microsoft YaHei', sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 80px auto;
-            padding: 0 20px;
-        }
-        h1 {
-            color: #ffffff;
-            text-align: center;
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #9ca3af;
-            margin-bottom: 40px;
-        }
-        .card {
-            display: block;
-            background-color: #111827;
-            border: 1px solid #1e293b;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 25px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: #3b82f6;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
-        }
-        .tag {
-            color: #a78bfa;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .card h2 {
-            color: #ffffff;
-            margin: 0 0 10px 0;
-            font-size: 24px;
-        }
-        .card p {
-            color: #9ca3af;
-            margin: 0;
-            font-size: 16px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的 AI 课程作业</title>
+<style>
+  :root {
+    --bg: #0b0f19;
+    --card: #111827;
+    --border: #1e293b;
+    --text: #d1d5db;
+    --muted: #9ca3af;
+    --accent: #3b82f6;
+    --ok: #22c55e;
+    --bad: #ef4444;
+    --warn: #f59e0b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Microsoft YaHei', -apple-system, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 0 20px 70px;
+  }
+  h1 {
+    color: #ffffff;
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+  .item { margin-bottom: 25px; }
+  .card {
+    position: relative;
+    display: block;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+  }
+  .tag {
+    color: #a78bfa;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .card h2 {
+    color: #ffffff;
+    margin: 0 0 10px 0;
+    font-size: 24px;
+  }
+  .card p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 16px;
+  }
+
+  /* ---- 文件检测徽标 ---- */
+  .badge {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #0d1424;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: all .25s;
+  }
+  .badge.ok   { color: var(--ok);   border-color: rgba(34,197,94,.45);  background: rgba(34,197,94,.08); }
+  .badge.bad  { color: var(--bad);  border-color: rgba(239,68,68,.45);  background: rgba(239,68,68,.08); }
+  .badge.found{ color: var(--warn); border-color: rgba(245,158,11,.45); background: rgba(245,158,11,.08); }
+
+  /* ---- 诊断提示条 ---- */
+  .diag {
+    display: none;
+    margin-top: 12px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.8;
+    border: 1px solid rgba(239,68,68,.35);
+    background: rgba(239,68,68,.07);
+    color: #fca5a5;
+  }
+  .diag.show { display: block; animation: fadeIn .25s ease; }
+  .diag.found {
+    border-color: rgba(245,158,11,.4);
+    background: rgba(245,158,11,.07);
+    color: #fcd34d;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } }
+  .diag b { color: #fff; }
+  .diag code {
+    background: #0d1424;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: 13px;
+    color: #93c5fd;
+    font-family: Consolas, Monaco, monospace;
+    word-break: break-all;
+  }
+  .diag ul { margin: 8px 0 0; padding-left: 20px; }
+  .diag li { margin-bottom: 4px; }
+  .diag a { color: #93c5fd; text-decoration: underline; }
+
+  .tools { text-align: center; margin-top: 6px; }
+  .recheck {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+    transition: all .2s;
+  }
+  .recheck:hover { border-color: var(--accent); color: #fff; }
+  .foot {
+    text-align: center;
+    color: #4b5563;
+    font-size: 12px;
+    margin-top: 36px;
+    line-height: 1.9;
+  }
+
+  @media (max-width: 520px) {
+    .container { margin: 44px auto; }
+    h1 { font-size: 26px; }
+    .card { padding: 22px; }
+    .card h2 { font-size: 20px; padding-right: 60px; }
+    .badge { top: 14px; right: 14px; font-size: 11px; }
+  }
+</style>
 </head>
 <body>
+<div class="container">
+  <h1>我的 AI 课程作业</h1>
+  <p class="subtitle">点击下方卡片查看作业详情</p>
 
-    <div class="container">
-        <h1>我的 AI 课程作业</h1>
-        <p class="subtitle">点击下方卡片查看作业详情</p >
+  <!-- 作业 1 -->
+  <div class="item">
+    <a href="homework1.html" class="card">
+      <span class="badge">检测中…</span>
+      <span class="tag">第 1 次作业</span>
+      <h2>AI 编程工具作品展示</h2>
+      <p>用 AI 编程工具完成的打砖块小游戏、工具对比柱状图与心得总结。</p>
+    </a>
+    <div class="diag"></div>
+  </div>
 
-        <!-- 作业 1 卡片 -->
-        <a href="homework1.html" class="card">
-            <span class="tag">第 1 次作业</span>
-            <h2>AI 编程工具作品展示</h2>
-            <p>用 AI 编程工具完成的打砖块小游戏、工具对比柱状图与心得总结。</p >
-        </a >
+  <!-- 作业 2 -->
+  <div class="item">
+    <a href="mlp.html" class="card">
+      <span class="badge">检测中…</span>
+      <span class="tag">第 2 次作业</span>
+      <h2>MLP 学习参数实现与动态可视化</h2>
+      <p>基于 TensorFlow 跑通 XOR 逻辑，并用纯前端代码实现实时参数更新的动态沙盒。</p>
+    </a>
+    <div class="diag"></div>
+  </div>
 
-        <!-- 作业 2 卡片 -->
-        <a href="mlp.html" class="card">
-            <span class="tag">第 2 次作业</span>
-            <h2>MLP 学习参数实现与动态可视化</h2>
-            <p>基于 TensorFlow 跑通 XOR 逻辑，并用纯前端代码实现实时参数更新的动态沙盒。</p >
-        </a >
-    </div>
+  <div class="tools">
+    <button class="recheck" id="recheck">🔄 重新检测文件</button>
+  </div>
 
+  <div class="foot">
+    徽标只是提示，<b style="color:#6b7280">不影响点击</b> —— 无论检测结果如何，点卡片都会正常跳转。<br>
+    本地双击预览时显示「未检测」属正常现象（本地浏览器不允许这类请求），部署到线上才会显示真实结果。
+  </div>
+</div>
+
+<script>
+/* =====================================================
+   文件存在性检测（只提示，不拦截点击）
+   ===================================================== */
+
+// 主链接探不到时额外尝试的常见写法
+const EXTRA_ALTS = {
+  "homework1.html": [
+    "homework-1.html", "homework_1.html", "hw1.html",
+    "作业1.html", "homework1.htm", "homework1/index.html"
+  ],
+  "mlp.html": [
+    "mlp/index.html", "mlp/index.html", "mlp.htm",
+    "mlp-lab.html", "MLP.html"
+  ]
+};
+
+// 大小写 / 扩展名变体
+function buildVariants(href) {
+  const out = new Set();
+  const m = href.match(/^(.*?)(\.html?)$/i);
+  if (m) {
+    const b = m[1];
+    const cap = b.charAt(0).toUpperCase() + b.slice(1);
+    [b, cap, b.toUpperCase()].forEach(x => {
+      [".html", ".htm", ".HTML"].forEach(ext => out.add(x + ext));
+    });
+  }
+  (EXTRA_ALTS[href] || []).forEach(u => out.add(u));
+  out.delete(href);
+  return [...out].slice(0, 16);
+}
+
+// 只探状态码，不解析内容
+async function exists(url) {
+  try {
+    let r = await fetch(url, { method: "HEAD", cache: "no-store" });
+    if (r.status === 405 || r.status === 501) {
+      r = await fetch(url, { method: "GET", cache: "no-store" });
+    }
+    return r.ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+function setBadge(el, cls, text) {
+  el.className = "badge " + cls;
+  el.textContent = text;
+}
+
+// 把相对链接还原成浏览器真正会请求的绝对地址，方便对照
+function absUrl(u) {
+  try { return new URL(u, location.href).href; } catch (e) { return u; }
+}
+
+async function checkItem(item) {
+  const card = item.querySelector(".card");
+  const badge = item.querySelector(".badge");
+  const diag = item.querySelector(".diag");
+  const href = card.getAttribute("href");
+
+  diag.className = "diag";
+  diag.innerHTML = "";
+
+  // 本地双击打开（file://）时无法检测
+  if (location.protocol === "file:") {
+    setBadge(badge, "", "本地预览·未检测");
+    card.dataset.state = "local";
+    return;
+  }
+
+  setBadge(badge, "", "检测中…");
+  card.dataset.state = "checking";
+
+  // 1) 直接检测链接本身
+  if (await exists(href)) {
+    setBadge(badge, "ok", "✅ 文件正常");
+    card.dataset.state = "ok";
+    return;
+  }
+
+  // 2) 猜常见写法
+  const variants = buildVariants(href);
+  const hits = [];
+  await Promise.all(variants.map(async v => {
+    if (await exists(v)) hits.push(v);
+  }));
+
+  if (hits.length) {
+    setBadge(badge, "found", "⚠️ 实际文件名不同");
+    card.dataset.state = "found";
+    diag.className = "diag found show";
+    diag.innerHTML =
+      "找不到 <code>" + href + "</code>，但探到了这些同名文件：<ul>" +
+      hits.map(h => '<li><a href="' + h + '">' + h + "</a> ← 这个能正常打开</li>").join("") +
+      "</ul><div style='margin-top:8px'>把导航里 <code>href=\"" + href +
+      "\"</code> 改成上面正确的那个名字即可。</div>";
+    return;
+  }
+
+  // 3) 没探到（只做客观提示，不影响点击跳转）
+  setBadge(badge, "bad", "⚠️ 未探到文件");
+  card.dataset.state = "bad";
+  diag.className = "diag show";
+  diag.innerHTML =
+    "<div style='margin-bottom:6px'>浏览器实际请求：<code>" + absUrl(href) + "</code></div>" +
+    "<div style='margin-bottom:10px'>当前页面地址：<code>" + location.href + "</code></div>" +
+    "这条地址没返回网页。如果文件确实已经上传，对照下面几点：<ul>" +
+    "<li>上面两个地址的<b>目录层级是否一致</b>（多一层或少一层目录都会导致找不到）</li>" +
+    "<li>GitHub 区分大小写：<code>Homework1.html</code> 和 <code>homework1.html</code> 是两个文件</li>" +
+    "<li>文件名末尾有没有多余空格（地址栏会显示成 <code>%20</code>）</li>" +
+    "<li>刚提交的话，GitHub Pages 需要 1～2 分钟重新构建</li>" +
+    "<li>浏览器缓存了旧页面：按 <b>Ctrl + Shift + R</b> 强制刷新</li>" +
+    "</ul>";
+}
+
+/* 检测结果只做提示，绝不拦截点击跳转：
+   无论检测成功还是失败，点卡片都会照常打开目标页面。 */
+
+async function checkAll() {
+  const items = [...document.querySelectorAll(".item")];
+  await Promise.all(items.map(checkItem));
+}
+
+document.getElementById("recheck").addEventListener("click", checkAll);
+checkAll();
+</script>
 </body>
+</html>
