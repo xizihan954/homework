@@ -3,65 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的课程作业导航</title>
+    <title>我的课程作业</title>
     <style>
         body {
             background-color: #0b0f19;
             color: #d1d5db;
             font-family: 'Microsoft YaHei', sans-serif;
-            line-height: 1.8;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
         }
-        /* 顶部导航栏 */
-        .top-nav {
-            background-color: #111827;
-            border-bottom: 1px solid #1e293b;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .logo { color: #3b82f6; font-weight: bold; font-size: 20px; letter-spacing: 1px; }
-        .nav-links a {
-            color: #9ca3af;
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 16px;
-            padding: 8px 16px;
-            border-radius: 6px;
-            transition: all 0.3s;
-        }
-        .nav-links a:hover { background-color: #1e293b; color: #fff; }
-        .nav-links a.active { background-color: #3b82f6; color: #fff; }
-
-        /* 主内容区 */
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 60px 20px;
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 0 20px;
         }
-        .header-text { text-align: center; margin-bottom: 50px; }
-        .header-text h1 {
-            color: #fff;
-            font-size: 42px;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #a78bfa, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        h1 {
+            color: #ffffff;
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 40px;
         }
-        .header-text p { color: #9ca3af; font-size: 18px; }
-
-        /* 作业卡片 */
         .card {
             display: block;
             background-color: #111827;
             border: 1px solid #1e293b;
             border-radius: 12px;
             padding: 30px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             text-decoration: none;
             transition: all 0.3s ease;
         }
@@ -71,47 +40,41 @@
             box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
         }
         .tag {
-            display: inline-block;
             color: #a78bfa;
-            border: 1px solid #a78bfa;
-            padding: 2px 10px;
-            border-radius: 20px;
             font-size: 14px;
-            margin-bottom: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
         }
-        .card h2 { color: #fff; font-size: 26px; margin: 0 0 10px 0; }
-        .card p { color: #9ca3af; font-size: 16px; margin: 0; }
+        .card h2 {
+            color: #ffffff;
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+        .card p {
+            color: #9ca3af;
+            margin: 0;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="top-nav">
-        <div class="logo">我的课程作业</div>
-        <div class="nav-links">
-            <a href=" " class="active">首页</a >
-            <a href="homework1.html">作业 1</a >
-            <a href="mlp.html">作业 2</a >
-        </div>
-    </div>
-
     <div class="container">
-        <div class="header-text">
-            <h1>我的 AI 课程作业</h1>
-            <p>点击下方卡片查看作业详情</p >
-        </div>
+        <h1>我的 AI 课程作业</h1>
 
-        <!-- 作业 1 卡片 -->
-        <a href="homework1.html" class="card">
-            <div class="tag">第 1 次作业</div>
+        <!-- 作业 1 -->
+        <a href=" " class="card">
+            <span class="tag">第 1 次作业</span>
             <h2>AI 编程工具作品展示</h2>
             <p>用 AI 编程工具完成的打砖块小游戏、工具对比柱状图与心得总结。</p >
         </a >
 
-        <!-- 作业 2 卡片 -->
+        <!-- 作业 2 -->
         <a href="mlp.html" class="card">
-            <div class="tag">第 2 次作业</div>
-            <h2>神经网络 XOR 训练可视化</h2>
-            <p>基于 TensorFlow 运行 XOR 异或代码，并将其隐藏层的工作过程进行可视化展示。</p >
+            <span class="tag">第 2 次作业</span>
+            <h2>MLP 学习参数实现与可视化</h2>
+            <p>基于 TensorFlow 跑通 XOR，并用纯前端代码实现实时参数更新的动态沙盒。</p >
         </a >
     </div>
 
